@@ -1,8 +1,45 @@
 import * as list from './list.js';
-import {reduce} from "./list";
 // todo: check for repeated attrs
 // todo: add testing
+const arr = [
+    {
+        name: 'href',
+        value: '1'
+    },
+    {
+        name: 'class',
+        value: '2'
+    },
+    {
+        name: 'data-type',
+        value: '3'
+    },
+    {
+        name: 'href',
+        value: '4'
+    },
+];
 
+// todo: добавить сортировку аттрибутов по алфавиту
+const _removeRepeatedAttr = (attr) => {
+    let newArray = [];
+    attr.forEach(e => {
+        console.log(e);
+        newArray.push(e);
+        newArray.forEach((el, i) => {
+           const currentName = e.name.toLowerCase();
+           const nameInNewArray = el.name.toLowerCase();
+           if (currentName === nameInNewArray) {
+               newArray[i] = {
+                   name: currentName,
+                   value: e.value,
+               }
+           }
+        });
+    });
+    return newArray;
+};
+console.log(_removeRepeatedAttr(arr));
 const _validateNode = (...mix) => mix.forEach(el => {
     if (!el.get('type')) {
         throw Error(`Argument must be a Node instance: ${mix}`);
@@ -72,18 +109,16 @@ export const setAttr = (node, newAttrName, value) => {
         }, oldAttr);
     }
     node.set('attr', newAttrs);
+    return node;
 };
 // attr obj{name: string; value: string;}
 export const setContent = (node, newNode, pos = 0) => {
     _validateNode(node, newNode);
     const oldContent = node.get('content');
-    let newContent;
-    if (pos === 0) {
-        newContent = list.cons(newNode, oldContent);
-    }
-
+    let newContent = list.cons(newNode, oldContent, pos);
+    node.set('content', newContent);
+    return node;
 };
 export const setName = () => {
 
 };
-console.log(_validate([123],[123123],[2]));
