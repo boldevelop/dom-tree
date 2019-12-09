@@ -32,9 +32,20 @@ const _checkList = (list) => {
  * @param {function:list} list - список.
  * @returns {function:list}
  */
-const cons = (element, list) => {
+export const cons = (element, list) => {
     _checkList(list);
     return pair.cons(element, list);
+};
+
+export const consPos = (element, list, pos) => {
+    _checkList(list);
+    const lengthList = length(list);
+    return reduce(list, (a, e, i) => {
+        if (i === pos) {
+            return cons(e, cons(element, a));
+        }
+        return cons(e, a);
+    }, l());
 };
 
 /**
@@ -86,10 +97,10 @@ export const isEmpty = list => {
  */
 export const reduce = (list, reducer, acc = 0) => {
     _checkList(list);
-    const iter = (iterList, acc) => !isEmpty(iterList)
-        ? iter(tail(iterList), reducer(acc, head(iterList)))
+    const iter = (iterList, acc, i) => !isEmpty(iterList)
+        ? iter(tail(iterList), reducer(acc, head(iterList), i++), i)
         : acc;
-    return iter(list, acc);
+    return iter(list, acc, 0);
 };
 
 /**
@@ -145,3 +156,4 @@ const res = reduce(numberLists, (e, a) => a + e, 0);
 const len = length(numberLists);
 const addedL = cons(2, numberLists);
 console.log(toString(numberLists));
+console.log(toString(consPos('start', numberLists, 3)));
