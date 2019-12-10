@@ -8,11 +8,14 @@
     "@babel/cli": "^7.7.5",
     "@babel/core": "^7.7.5",
     "@babel/preset-env": "^7.7.5",
+    "babel-jest": "^24.9.0",
     "babel-loader": "^8.0.6",
+    "jest": "^24.9.0",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10"
   },
   "scripts": {
+    "test": "jest",
     "build": "webpack --mode development",
     "watch": "webpack --mode development --watch true",
     "babel": "babel list.js --out-file new-list.js"

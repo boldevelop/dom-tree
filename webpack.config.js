@@ -4,7 +4,7 @@ module.exports = (env, argv) => {
     const dev = argv.mode !== 'production';
     return {
         entry: {
-            common: path.resolve(__dirname, './node.js'),
+            common: path.resolve(__dirname, 'core/node.js'),
         },
         output: {
             path: path.resolve(__dirname, 'dist'),

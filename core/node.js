@@ -1,45 +1,25 @@
 import * as list from './list.js';
-// todo: check for repeated attrs
-// todo: add testing
-const arr = [
-    {
-        name: 'href',
-        value: '1'
-    },
-    {
-        name: 'class',
-        value: '2'
-    },
-    {
-        name: 'data-type',
-        value: '3'
-    },
-    {
-        name: 'href',
-        value: '4'
-    },
-];
 
 // todo: добавить сортировку аттрибутов по алфавиту
-const _removeRepeatedAttr = (attr) => {
+export const _removeRepeatedAttr = (attr) => {
     let newArray = [];
-    attr.forEach(e => {
-        console.log(e);
-        newArray.push(e);
-        newArray.forEach((el, i) => {
-           const currentName = e.name.toLowerCase();
-           const nameInNewArray = el.name.toLowerCase();
-           if (currentName === nameInNewArray) {
-               newArray[i] = {
-                   name: currentName,
-                   value: e.value,
-               }
-           }
+    attr.forEach(firstElement => {
+        let alreadyInArray = false;
+        newArray.forEach(secondElement => {
+          const firstName = firstElement.name.toLowerCase();
+          const secondName = secondElement.name.toLowerCase();
+          if (firstName === secondName) {
+              alreadyInArray = true;
+              secondElement.value = firstElement.value;
+          }
         });
+        if (!alreadyInArray) {
+            newArray.push(firstElement);
+        }
     });
     return newArray;
 };
-console.log(_removeRepeatedAttr(arr));
+
 const _validateNode = (...mix) => mix.forEach(el => {
     if (!el.get('type')) {
         throw Error(`Argument must be a Node instance: ${mix}`);
@@ -58,12 +38,13 @@ const _validateTypeString = (s) => {
 const _node = (type, name, attr, content) => {
     _validate(attr, content);
     _validateTypeString(name);
+    const clearAttrs = _removeRepeatedAttr(attr);
     const nodeMap = new Map();
     nodeMap.set('type', type);
     nodeMap.set('name', name ? name : null);
     switch (type) {
         case 'singleNode':
-            nodeMap.set('attr', list.l(...attr));
+            nodeMap.set('attr', list.l(...clearAttrs));
             nodeMap.set('content', []);
             break;
         case 'textNode':
@@ -72,7 +53,7 @@ const _node = (type, name, attr, content) => {
             nodeMap.set('content', list.l(...content));
             break;
         case 'htmlNode':
-            nodeMap.set('attr', list.l(...attr));
+            nodeMap.set('attr', list.l(...clearAttrs));
             nodeMap.set('content', list.l(...content));
             break;
     }
@@ -87,6 +68,9 @@ export const textNode = (content) => {
 export const htmlNode = (name, attr, content) => {
     return _node('htmlNode', name, attr, content);
 };
+export const getAttrs = (node) => node.get('attr');
+export const getName = (node) => node.get('name');
+export const getContent = (node) => node.get('content');
 const _hasNodeAttr = (node, attr) =>
     list.reduce(node, (a, e) =>
         e.name === attr ? true : a, false);
@@ -95,13 +79,13 @@ export const setAttr = (node, newAttrName, value) => {
     _validateTypeString(newAttrName);
     const oldAttr = node.get('attr');
     let newAttrs;
-    if (_hasNodeAttr(node, newAttrName)) {
-        newAttrs = list.reduce(oldAttr, (a, e) => {
+    if (_hasNodeAttr(oldAttr, newAttrName)) {
+        newAttrs = list.reverse(list.reduce(oldAttr, (a, e) => {
             if (e.name === newAttrName) {
                 e.value = value;
             }
             return list.cons(e, a);
-        }, list.l());
+        }, list.l()));
     } else {
         newAttrs = list.cons({
             name: newAttrName,
@@ -111,14 +95,29 @@ export const setAttr = (node, newAttrName, value) => {
     node.set('attr', newAttrs);
     return node;
 };
+
 // attr obj{name: string; value: string;}
-export const setContent = (node, newNode, pos = 0) => {
+
+// todo: доделать логику добавления контента
+export const addContent = (node, newNode, pos = 0) => {
     _validateNode(node, newNode);
-    const oldContent = node.get('content');
-    let newContent = list.cons(newNode, oldContent, pos);
+    const oldContent = getContent(node);
+    console.log(list.toString(oldContent));
+    const newContent = list.cons(newNode, oldContent, pos);
+    console.log(list.toString(newContent));
     node.set('content', newContent);
     return node;
 };
-export const setName = () => {
-
+export const setName = (node, name, type = 'htmlNode') => {
+    _validate(node);
+    _validateTypeString(name);
+    node.set('name', name);
+    switch (type) {
+        case 'singleNode':
+            node.set('content', []);
+            break;
+        case 'textNode':
+            node.set('attr', []);
+            break;
+    }
 };

@@ -5,7 +5,7 @@ import * as pair from './cons.js';
  * @param {*} mix - проверяемый элемент.
  * @returns {boolean}
  */
-const isList = mix => {
+export const isList = mix => {
     if (mix === null) {
         return true
     }
@@ -53,7 +53,9 @@ export const cons = (element, list, pos = 0) => {
     const posReplace = pos > lengthList ? lengthList - 1 : pos;
     return reverse(reduce(list, (a, e, i) => {
         if (i === posReplace) {
-            return cons(e, cons(element, a));
+            return i === lengthList - 1
+                ? cons(element, cons(e, a))
+                : cons(e, cons(element, a));
         }
         return pair.cons(e, a);
     }, null));
@@ -146,6 +148,21 @@ export const has = (list, elem) => {
 };
 
 /**
+ * concat two lists
+ * @param {function:list} list1 - список.
+ * @param {function:list} list2 - список.
+ * @returns {function:list}
+ */
+export const concat = (list1, list2) => {
+    _checkList(list1);
+    _checkList(list2);
+    if (isEmpty(list1)) {
+        return list2;
+    }
+    return _cons(head(list1), concat(tail(list1), list2));
+};
+
+/**
  * presentation list as a string
  * @param {function:list} list - список.
  * @returns {string}
@@ -168,11 +185,3 @@ export const toString = (list) => {
     }, '');
     return `(${strOfList})`;
 };
-
-// todo: need testing
-const numberLists = l(1, 2, 3, l('qwe', 'rty'));
-const res = reduce(numberLists, (e, a) => a + e, 0);
-const len = length(numberLists);
-const addedL = cons(2, numberLists);
-console.log(toString(numberLists));
-console.log(toString(cons('start', numberLists, 3)));
