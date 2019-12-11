@@ -1,6 +1,11 @@
 import * as list from './list.js';
 
 // todo: добавить сортировку аттрибутов по алфавиту
+/**
+ * remove repeated name in array of attributes
+ * @param {array} attr - array of attr.
+ * @returns {array}
+ */
 export const _removeRepeatedAttr = (attr) => {
     let newArray = [];
     attr.forEach(firstElement => {
@@ -20,21 +25,52 @@ export const _removeRepeatedAttr = (attr) => {
     return newArray;
 };
 
+/**
+ * node validator
+ * @param {*} mix
+ * @returns {void}
+ */
 const _validateNode = (...mix) => mix.forEach(el => {
     if (!el.get('type')) {
         throw Error(`Argument must be a Node instance: ${mix}`);
     }
 });
+
+/**
+ * type array validator
+ * @param {*} args
+ * @returns {void}
+ */
 const _validate = (...args) => args.forEach(el => {
     if (!Array.isArray(el)) {
         throw Error(`Argument must be an array: ${el}`);
     }
 });
+
+/**
+ * type string validator
+ * @param {*} s
+ * @returns {void}
+ */
 const _validateTypeString = (s) => {
     if (typeof s !== 'string') {
         throw Error(`Argument must be a string: ${s}`);
     }
 };
+
+/**
+ * constructor for node
+ * @constructor
+ * @param {string} type - type of node
+ * can be only 'singleNode', 'textNode' and 'htmlNode'.
+ * @param {string|Null} name - name of node.
+ * @param {array} attr - attributes array of objects.
+ * It is set { name: string, value: string}.
+ * Array of attributes will convert to list of objects.
+ * @param {array} content - array of content in node.
+ * It can be other nodes or string
+ * @returns {Map}
+ */
 const _node = (type, name, attr, content) => {
     _validate(attr, content);
     if (name !== null) {
@@ -61,23 +97,83 @@ const _node = (type, name, attr, content) => {
     }
     return nodeMap;
 };
+
+/**
+ * node wrapper for 'singleNode' type
+ * @param {string|Null} name - name of node.
+ * @param {array} attr - attributes array of objects.
+ * It is set { name: string, value: string}.
+ * Array of attributes will convert to list of objects.
+ * @returns {Map}
+ */
 export const singleNode = (name, attr) => {
     return _node('singleNode', name, attr, []);
 };
+
+
+/**
+ * node wrapper for 'textNode' type
+ * @param {array} content - array of content in node.
+ * It can be other nodes or string
+ * @returns {Map}
+ */
 export const textNode = (content) => {
     return _node('textNode', '', [], content);
 };
+
+/**
+ * node wrapper for 'htmlNode' type
+ * @param {string|Null} name - name of node.
+ * @param {array} attr - attributes array of objects.
+ * It is set { name: string, value: string}.
+ * Array of attributes will convert to list of objects.
+ * @param {array} content - array of content in node.
+ * It can be other nodes or string
+ * @returns {Map}
+ */
 export const htmlNode = (name, attr, content) => {
     return _node('htmlNode', name, attr, content);
 };
+
+/**
+ * get node attributes
+ * @param {Map} node - name of node.
+ * @returns {list}
+ */
 export const getAttrs = (node) => node.get('attr');
+
+/**
+ * get node name
+ * @param {Map} node - name of node.
+ * @returns {string|Null}
+ */
 export const getName = (node) => node.get('name');
+
+/**
+ * get node content
+ * @param {Map} node - name of node.
+ * @returns {array}
+ */
 export const getContent = (node) => node.get('content');
+
+/**
+ * check node for exist attribute with name @attr
+ * @param {Map} node
+ * @param {string} attr
+ * @returns {boolean}
+ */
 const _hasNodeAttr = (node, attr) =>
     list.reduce(node, (a, e) =>
         e.name === attr ? true : a, false);
 
 // todo: можно сделать без мутации, преобразовать список в массив
+/**
+ * set attribute in node
+ * @param {Map} node
+ * @param {string} newAttrName
+ * @param {*} value
+ * @returns {Map}
+ */
 export const setAttr = (node, newAttrName, value) => {
     _validateNode(node);
     _validateTypeString(newAttrName);
@@ -100,8 +196,16 @@ export const setAttr = (node, newAttrName, value) => {
     return node;
 };
 
-// attr obj{name: string; value: string;}
 // todo: добавить конкатинацию ноды при добавлениее textNode в textNode
+/**
+ * insert new node or string in content of @node
+ * (in element of content which is string)
+ * @param {Map} node
+ * @param {Map|string} insertElem
+ * @param {number} numberOfContent - position changed element in node content
+ * @param {number} pos - position in string of element
+ * @returns {Map}
+ */
 export const addContent = (node, insertElem, numberOfContent = 0, pos = 0) => {
     _validateNode(node);
     let isStringInsertElem = true;
@@ -131,10 +235,18 @@ export const addContent = (node, insertElem, numberOfContent = 0, pos = 0) => {
     return _node(node.get('type'), getName(node), getAttrs(node), newContent);
 };
 
+/**
+ * set node name
+ * @param {Map} node
+ * @param {string} name
+ * @param {boolean} isSingleNode
+ * @returns {Map}
+ */
 export const setName = (node, name, isSingleNode = false) => {
     _validate(node);
     _validateTypeString(name);
     if (isSingleNode) {
+        // todo добваить ковертазию списка в массив
         return _node('singleNode', name, getAttrs(node), []);
     }
     if (node.get('type') === 'textNode') {
