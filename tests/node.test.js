@@ -53,11 +53,11 @@ test('node: create', () => {
     const nameOfSingleNode = sNode.get('type');
     const htmlContent = node.getContent(hNode);
     const listOfSingleAttrs = list.l(...node._removeRepeatedAttr(arrOfAttrs));
-    const listOfHtmlNode = list.l(...[tNode, sNode]);
+    const listOfHtmlNode = [tNode, sNode];
     expect(list.toString(singleAttrs))
         .toBe(list.toString(listOfSingleAttrs));
-    expect(list.toString(htmlContent))
-        .toBe(list.toString(listOfHtmlNode));
+    expect(htmlContent)
+        .toStrictEqual(listOfHtmlNode);
     expect(nameOfSingleNode)
         .toBe('singleNode');
     expect(node.getName(hNode))
@@ -90,12 +90,21 @@ test('node: setAttr', () => {
 });
 
 test('node: setContent', () => {
-    const newContent = ['новый контент'];
-    const addNode = node.textNode(newContent);
-    const nodeWithNewContent = node.addContent(tNode, addNode);
-    const content = node.getContent(nodeWithNewContent);
-    console.log(list.toString(node.getContent(list.head(content))));
+    const newTextNode = node.textNode(['Описание']);
+    const insertionPos = 5;
+    const oldContentString = node.getContent(tNode)[0];
+    const firstString = oldContentString.slice(0, insertionPos);
+    const secondString = oldContentString.slice(insertionPos);
+    const setContentNode = node.addContent(tNode, 'Это новый контент', 0);
+    const setContentNode2 = node.addContent(tNode, newTextNode, 0, -12);
+    const setContentNode3 = node.addContent(tNode, newTextNode, 0, insertionPos);
+    const setContentNode4 = node.addContent(tNode, newTextNode, 0, 111);
 
-    expect(list.toString(content))
-        .toBe(list.toString(list.l(newContent, list.head(node.getContent(tNode)))));
+    expect(node.getContent(setContentNode)[0]).toBe('Это новый контент');
+    expect(node.getContent(setContentNode2))
+        .toStrictEqual([newTextNode, oldContentString]);
+    expect(node.getContent(setContentNode3))
+        .toStrictEqual([firstString, newTextNode, secondString]);
+    expect(node.getContent(setContentNode4))
+        .toStrictEqual([oldContentString, newTextNode]);
 });

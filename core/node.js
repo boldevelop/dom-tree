@@ -37,7 +37,9 @@ const _validateTypeString = (s) => {
 };
 const _node = (type, name, attr, content) => {
     _validate(attr, content);
-    _validateTypeString(name);
+    if (name !== null) {
+        _validateTypeString(name);
+    }
     const clearAttrs = _removeRepeatedAttr(attr);
     const nodeMap = new Map();
     nodeMap.set('type', type);
@@ -48,13 +50,13 @@ const _node = (type, name, attr, content) => {
             nodeMap.set('content', []);
             break;
         case 'textNode':
-            nodeMap.set('name', []);
+            nodeMap.set('name', null);
             nodeMap.set('attr', []);
-            nodeMap.set('content', list.l(...content));
+            nodeMap.set('content', content);
             break;
         case 'htmlNode':
             nodeMap.set('attr', list.l(...clearAttrs));
-            nodeMap.set('content', list.l(...content));
+            nodeMap.set('content', content);
             break;
     }
     return nodeMap;
@@ -74,6 +76,8 @@ export const getContent = (node) => node.get('content');
 const _hasNodeAttr = (node, attr) =>
     list.reduce(node, (a, e) =>
         e.name === attr ? true : a, false);
+
+// todo: можно сделать без мутации, преобразовать список в массив
 export const setAttr = (node, newAttrName, value) => {
     _validateNode(node);
     _validateTypeString(newAttrName);
@@ -97,27 +101,43 @@ export const setAttr = (node, newAttrName, value) => {
 };
 
 // attr obj{name: string; value: string;}
-
-// todo: доделать логику добавления контента
-export const addContent = (node, newNode, pos = 0) => {
-    _validateNode(node, newNode);
+// todo: добавить конкатинацию ноды при добавлениее textNode в textNode
+export const addContent = (node, insertElem, numberOfContent = 0, pos = 0) => {
+    _validateNode(node);
+    let isStringInsertElem = true;
+    if (typeof insertElem !== 'string') {
+        _validateNode(node);
+        isStringInsertElem = false;
+    }
     const oldContent = getContent(node);
-    console.log(list.toString(oldContent));
-    const newContent = list.cons(newNode, oldContent, pos);
-    console.log(list.toString(newContent));
-    node.set('content', newContent);
-    return node;
+    const newContent = oldContent.map((e, i) => {
+        if (i === numberOfContent) {
+            if (isStringInsertElem) {
+                return insertElem;
+            } else {
+                const firstString = e.slice(0, pos < 0 ? 0 : pos);
+                const secondString = e.slice(pos < 0 ? 0 : pos);
+                if (pos <= 0) {
+                    return [insertElem, secondString];
+                }
+                if (pos >= e.length) {
+                    return [firstString, insertElem];
+                }
+                return [firstString, insertElem, secondString];
+            }
+        }
+        return e;
+    }).flat();
+    return _node(node.get('type'), getName(node), getAttrs(node), newContent);
 };
-export const setName = (node, name, type = 'htmlNode') => {
+
+export const setName = (node, name, isSingleNode = false) => {
     _validate(node);
     _validateTypeString(name);
-    node.set('name', name);
-    switch (type) {
-        case 'singleNode':
-            node.set('content', []);
-            break;
-        case 'textNode':
-            node.set('attr', []);
-            break;
+    if (isSingleNode) {
+        return _node('singleNode', name, getAttrs(node), []);
+    }
+    if (node.get('type') === 'textNode') {
+        return _node('htmlNode', name, [], getContent(node));
     }
 };
