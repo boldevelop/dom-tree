@@ -196,6 +196,18 @@ export const setAttr = (node, newAttrName, value) => {
     return node;
 };
 
+/**
+ * flatten array recursively
+ * @param {array} arr1
+ * @returns {array}
+ */
+export const flattenDeep = (arr1) =>
+    arr1.reduce((acc, val) =>
+        Array.isArray(val)
+            ? acc.concat(flattenDeep(val))
+            : acc.concat(val), []);
+
+
 // todo: добавить конкатинацию ноды при добавлениее textNode в textNode
 /**
  * insert new node or string in content of @node
@@ -231,8 +243,8 @@ export const addContent = (node, insertElem, numberOfContent = 0, pos = 0) => {
             }
         }
         return e;
-    }).flat();
-    return _node(node.get('type'), getName(node), getAttrs(node), newContent);
+    });
+    return _node(node.get('type'), getName(node), getAttrs(node), flattenDeep(newContent));
 };
 
 /**
