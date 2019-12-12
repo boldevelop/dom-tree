@@ -163,6 +163,24 @@ export const concat = (list1, list2) => {
 };
 
 /**
+ * covert list to array
+ * @param {function:list} list - список.
+ * @returns {array}
+ */
+export const convertToArray = (list) => {
+    _checkList(list);
+    let array = [];
+    const iter = iterList => {
+        if (isEmpty(iterList)) {
+            return array;
+        }
+        array.push(head(iterList));
+        return iter(tail(iterList));
+    };
+    return iter(list);
+};
+
+/**
  * presentation list as a string
  * @param {function:list} list - список.
  * @returns {string}

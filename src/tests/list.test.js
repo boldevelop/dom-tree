@@ -43,4 +43,8 @@ test('list', () => {
     expect(list.toString(list.cons(6, numberLists, 10)))
         .toBe('(1, 2, 3, 4, 5, 6)');
 
+    // convertToArray
+    expect(list.convertToArray(numberLists))
+        .toStrictEqual(array);
+
 });

@@ -87,7 +87,7 @@ const _node = (type, name, attr, content) => {
             break;
         case 'textNode':
             nodeMap.set('name', null);
-            nodeMap.set('attr', []);
+            nodeMap.set('attr', list.l());
             nodeMap.set('content', content);
             break;
         case 'htmlNode':
@@ -138,7 +138,7 @@ export const htmlNode = (name, attr, content) => {
 /**
  * get node attributes
  * @param {Map} node - name of node.
- * @returns {list}
+ * @returns {function:list}
  */
 export const getAttrs = (node) => node.get('attr');
 
@@ -166,7 +166,6 @@ const _hasNodeAttr = (node, attr) =>
     list.reduce(node, (a, e) =>
         e.name === attr ? true : a, false);
 
-// todo: можно сделать без мутации, преобразовать список в массив
 /**
  * set attribute in node
  * @param {Map} node
@@ -192,8 +191,7 @@ export const setAttr = (node, newAttrName, value) => {
             value,
         }, oldAttr);
     }
-    node.set('attr', newAttrs);
-    return node;
+    return _node(node.get('type'), getName(node), list.convertToArray(newAttrs), getContent(node));
 };
 
 /**
@@ -244,7 +242,7 @@ export const addContent = (node, insertElem, numberOfContent = 0, pos = 0) => {
         }
         return e;
     });
-    return _node(node.get('type'), getName(node), getAttrs(node), flattenDeep(newContent));
+    return _node(node.get('type'), getName(node), list.convertToArray(getAttrs(node)), flattenDeep(newContent));
 };
 
 /**
@@ -258,10 +256,9 @@ export const setName = (node, name, isSingleNode = false) => {
     _validate(node);
     _validateTypeString(name);
     if (isSingleNode) {
-        // todo добваить ковертазию списка в массив
-        return _node('singleNode', name, getAttrs(node), []);
+        return _node('singleNode', name, list.convertToArray(getAttrs(node)), []);
     }
     if (node.get('type') === 'textNode') {
-        return _node('htmlNode', name, [], getContent(node));
+        return _node('htmlNode', name, list.l(), getContent(node));
     }
 };
