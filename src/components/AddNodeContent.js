@@ -7,6 +7,8 @@ import AddNodeAttributes from "./AddNodeAttributes";
 import Button from "@material-ui/core/Button";
 import WhenFieldChanges from "./WhenFieldChanges";
 
+const required = value => (value ? undefined : "Required");
+
 const AddNodeContent = ({name, index, removeAttr, push, isHtmlNode, isSingleNode}) => (
     <div key={index}>
         <WhenFieldChanges
@@ -27,6 +29,7 @@ const AddNodeContent = ({name, index, removeAttr, push, isHtmlNode, isSingleNode
             required
             name={`${name}.name`}
             component={TextField}
+            validate={isHtmlNode ? required : undefined}
             disabled={!isHtmlNode}
             type="text"
             label="название ноды"

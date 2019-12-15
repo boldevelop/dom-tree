@@ -6,6 +6,7 @@ import {Box} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 
+
 export class Main extends React.Component {
     constructor(props) {
         super(props);
@@ -14,7 +15,11 @@ export class Main extends React.Component {
             nodes: null
         };
     }
-
+    updateNodes = newNodes => {
+        this.setState({
+            nodes: node.createNodeFromForm(newNodes)
+        })
+    };
     render() {
         const { nodes } = this.state;
         const attrs = [
@@ -39,14 +44,22 @@ export class Main extends React.Component {
                 <Grid container justify='center' alignItems='center'>
                     <Box width="75%">
                         <Paper style={{ padding: 16 }}>
-                            <AddNode/>
+                            <AddNode updateNodes={this.updateNodes}/>
                         </Paper>
                     </Box>
                 </Grid>
             </Box>
         );
         if (nodes) {
-            content = <NodeWrapper node={nodes}/>;
+            content = (
+                <Box width={1} height={1} mt={5}>
+                    <Grid container justify='center' alignItems='center'>
+                        <Box width="90%">
+                            <NodeWrapper node={nodes}/>
+                        </Box>
+                    </Grid>
+                </Box>
+            );
         }
 
         return content;

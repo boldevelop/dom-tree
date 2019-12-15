@@ -10,20 +10,22 @@ import Node from '../components/Node';
 import * as n from "../core/node";
 import {Box} from "@material-ui/core";
 
-export const NodeWrapper = ({node}) => {
+export const NodeWrapper = ({node, index, id}) => {
     let isNodeString = false;
     let content = [];
     let name = '';
+    let recalculatedId = id;
     if (typeof node === 'string') {
         isNodeString = true;
     } else {
         name = n.getName(node) ? n.getName(node) : 'textNode';
         content = n.getContent(node);
+        recalculatedId = n.getId(node);
     }
     return (
         <>
             {isNodeString ? (
-                <Node content={node} />
+                <Node content={node} index={index} id={recalculatedId}/>
             ) : (
                 <Box width={1} mb={1}>
                     {content.length ? (
@@ -33,7 +35,7 @@ export const NodeWrapper = ({node}) => {
                                 aria-label="Expand"
                                 aria-controls="additional-actions1-content"
                                 id="additional-actions1-header">
-                                <Typography variant="h4" gutterBottom>
+                                <Typography variant="h4" gutterBottom onClick={() => console.log(recalculatedId)}>
                                     {name}
                                 </Typography>
                             </ExpansionPanelSummary>
@@ -46,7 +48,7 @@ export const NodeWrapper = ({node}) => {
                                     width={1}
                                 >
                                     {content.map(
-                                        (el, i) => <NodeWrapper node={el} key={i}/>
+                                        (el, i) => <NodeWrapper node={el} key={i} index={i} id={recalculatedId}/>
                                     )}
                                 </Grid>
                             </ExpansionPanelDetails>

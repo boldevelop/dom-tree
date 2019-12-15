@@ -1,15 +1,13 @@
 import React from "react";
-import { TextField } from 'final-form-material-ui';
+import {Checkbox, TextField} from 'final-form-material-ui';
 import { Form, Field } from "react-final-form";
 import Button from "@material-ui/core/Button";
 import arrayMutators from "final-form-arrays";
 import { FieldArray } from "react-final-form-arrays";
 import AddNodeAttributes from "./AddNodeAttributes";
 import AddNodeContent from "./AddNodeContent";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 
-const onSubmit = async values => {
-    console.log(values);
-};
 const validate = values => {
     const errors = {};
     if (!values.name) {
@@ -20,6 +18,7 @@ const validate = values => {
 const removeAttribute = (i, fields) => fields.remove(i);
 const initialValues = {
     name: 'div',
+    htmlNode: true,
     attributes: [
         {
             name: "class",
@@ -52,7 +51,11 @@ const addNodeValue = {
     singleNode: false
 };
 
-const AddNode = () => {
+const AddNode = ({updateNodes}) => {
+    const onSubmit = async values => {
+        console.log('submit');
+        updateNodes(values);
+    };
     return (
         <Form
             onSubmit={onSubmit}

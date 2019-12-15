@@ -1,4 +1,19 @@
 import * as list from './list.js';
+import md5 from 'md5';
+
+/**
+ * minimal hash function
+ * @returns {string}
+ */
+const makeHash = (n = 5) => {
+    let text = "";
+    const possible = "abcdefghijklmnopqrstuvwxyz";
+    for (let i of Array(n)) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;
+};
+
 
 // todo: добавить сортировку аттрибутов по алфавиту
 /**
@@ -80,6 +95,7 @@ const _node = (type, name, attr, content) => {
     const nodeMap = new Map();
     nodeMap.set('type', type);
     nodeMap.set('name', name ? name : null);
+    nodeMap.set('id', name ? md5(name) : md5(makeHash()));
     switch (type) {
         case 'singleNode':
             nodeMap.set('attr', list.l(...clearAttrs));
@@ -156,6 +172,15 @@ export const getName = (node) => node.get('name');
  */
 export const getContent = (node) => node.get('content');
 
+
+/**
+ * get node id
+ * @param {Map} node - name of node.
+ * @returns {number}
+ */
+export const getId = (node) => node.get('id');
+
+
 /**
  * check node for exist attribute with name @attr
  * @param {Map} node
@@ -206,7 +231,7 @@ export const flattenDeep = (arr1) =>
             : acc.concat(val), []);
 
 
-// todo: добавить конкатинацию ноды при добавлениее textNode в textNode
+// todo: добавить конкатенацию ноды при добавлениее textNode в textNode
 /**
  * insert new node or string in content of @node
  * (in element of content which is string)
@@ -260,5 +285,79 @@ export const setName = (node, name, isSingleNode = false) => {
     }
     if (node.get('type') === 'textNode') {
         return _node('htmlNode', name, list.l(), getContent(node));
+    }
+};
+
+// todo: протестирвоать
+const content = {
+    "name": "div",
+    "htmlNode": true,
+    "attributes": [
+        {
+            "name": "class",
+            "value": "ssss"
+        }
+    ],
+    "content": [
+        {
+            "name": "asss",
+            "attributes": [
+                {
+                    "name": "class",
+                    "value": "sdssss"
+                }
+            ],
+            "htmlNode": true,
+            "singleNode": false,
+            "content": "content of a node"
+        },
+        {
+            "name": "span",
+            "attributes": [
+                {
+                    "name": "class",
+                    "value": "aaaa"
+                }
+            ],
+            "htmlNode": true,
+            "singleNode": true
+        },
+        {
+            "attributes": [
+                {
+                    "name": "class",
+                    "value": ""
+                }
+            ],
+            "htmlNode": false,
+            "singleNode": false,
+            "content": "another content"
+        }
+    ]
+};
+
+export const createNodeFromForm = node => {
+    let type = 'htmlNode';
+    if (!node.htmlNode) {
+        type = 'textNode';
+    }
+    if (node.singleNode) {
+        type = 'singleNode'
+    }
+    let content = [];
+    if (node.content) {
+        if (Array.isArray(node.content)) {
+            content = node.content.map((e => createNodeFromForm(e)));
+        } else if (typeof node.content === 'string') {
+            content.push(node.content);
+        }
+    }
+    switch (type) {
+        case 'singleNode':
+            return singleNode(node.name, node.attributes);
+        case 'textNode':
+            return textNode(content);
+        case 'htmlNode':
+            return htmlNode(node.name, node.attributes, content);
     }
 };
