@@ -10,7 +10,7 @@ import Node from '../components/Node';
 import * as n from "../core/node";
 import {Box} from "@material-ui/core";
 
-export const NodeWrapper = ({node, index, id}) => {
+export const NodeWrapper = ({node, index, id, setName}) => {
     let isNodeString = false;
     let content = [];
     let name = '';
@@ -35,7 +35,7 @@ export const NodeWrapper = ({node, index, id}) => {
                                 aria-label="Expand"
                                 aria-controls="additional-actions1-content"
                                 id="additional-actions1-header">
-                                <Typography variant="h4" gutterBottom onClick={() => console.log(recalculatedId)}>
+                                <Typography variant="h4" gutterBottom onClick={() => setName(recalculatedId)}>
                                     {name}
                                 </Typography>
                             </ExpansionPanelSummary>
@@ -48,7 +48,7 @@ export const NodeWrapper = ({node, index, id}) => {
                                     width={1}
                                 >
                                     {content.map(
-                                        (el, i) => <NodeWrapper node={el} key={i} index={i} id={recalculatedId}/>
+                                        (el, i) => <NodeWrapper node={el} key={i} index={i} id={recalculatedId} setName={setName}/>
                                     )}
                                 </Grid>
                             </ExpansionPanelDetails>

@@ -15,9 +15,14 @@ export class Main extends React.Component {
         };
     }
     updateNodes = newNodes => {
+        console.log(node.createNodeFromForm(newNodes));
         this.setState({
             nodes: node.createNodeFromForm(newNodes)
         })
+    };
+    setName = (id) => {
+        const searchNode = node.getNodeById(this.state.nodes, id);
+        console.log(searchNode);
     };
     render() {
         const { nodes } = this.state;
@@ -54,7 +59,7 @@ export class Main extends React.Component {
                 <Box width={1} height={1} mt={5}>
                     <Grid container justify='center' alignItems='center'>
                         <Box width="90%">
-                            <NodeWrapper node={nodes}/>
+                            <NodeWrapper node={nodes} setName={this.setName}/>
                         </Box>
                     </Grid>
                 </Box>

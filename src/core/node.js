@@ -376,23 +376,30 @@ export const createNodeFromForm = node => {
  * @returns {Map}
  */
 export const getNodeById = (node, id) => {
+    if (id === getId(node)) {
+        return node;
+    }
     const que = new Queue();
-    que.enqueue(node);
+    getContent(node).forEach((el) => {
+        if (typeof el !== 'string') {
+            que.enqueue(el);
+        }
+    });
     const iter = (q, searchNode) => {
-        if (!q.length) {
+        if (!q.length || searchNode) {
             return searchNode;
         }
         const elem = q.dequeue();
-        if (typeof elem !== 'string') {
-            const content = getContent(elem);
-            const currentNodeId = getId(elem);
-            if (currentNodeId === id) {
-                return iter(q, elem);
-            } else {
-                q.enqueue(content);
-                return iter(q);
-            }
+        const currentNodeId = getId(elem);
+        if (currentNodeId === id) {
+            return iter(q, elem);
         }
+        getContent(node).forEach((el) => {
+            if (typeof el !== 'string') {
+                que.enqueue(el);
+            }
+        });
+        return iter(q, searchNode);
     };
     return iter(que, undefined);
 };
