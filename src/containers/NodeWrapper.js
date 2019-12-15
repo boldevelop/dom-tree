@@ -7,23 +7,27 @@ import Grid from "@material-ui/core/Grid";
 
 import Node from '../components/Node';
 import * as n from "../core/node";
+import * as l from "../core/list";
 import {Box} from "@material-ui/core";
 import {NodeName} from "../components/NodeName";
+import {NodeAttributes} from "../components/NodeAttributes";
 
 export const NodeWrapper = ({node, index, id, setName}) => {
     let isNodeString = false;
     let content = [];
     let name = '';
     let recalculatedId = id;
+    let attrs = l.l();
     if (typeof node === 'string') {
         isNodeString = true;
     } else {
         name = n.getName(node) ? n.getName(node) : 'textNode';
         content = n.getContent(node);
         recalculatedId = n.getId(node);
+        attrs = n.getAttrs(node);
     }
     const updateName = (name) => {
-        setName(index, recalculatedId, name);
+        setName(recalculatedId, name);
     };
 
     return (
@@ -39,7 +43,18 @@ export const NodeWrapper = ({node, index, id, setName}) => {
                                 aria-label="Expand"
                                 aria-controls="additional-actions1-content"
                                 id="additional-actions1-header">
-                                <NodeName name={name} updateName={updateName}/>
+                                <Grid
+                                    container
+                                    direction="column"
+                                    justify="flex-start"
+                                    alignItems="flex-start"
+                                    width={1}
+                                >
+                                    <NodeName name={name} updateName={updateName}/>
+                                    {l.length(attrs)
+                                        ? (<NodeAttributes id={recalculatedId} attrs={l.convertToArray(attrs)} />)
+                                        : null}
+                                </Grid>
                             </ExpansionPanelSummary>
                             <ExpansionPanelDetails>
                                 <Grid

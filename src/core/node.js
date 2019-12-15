@@ -443,6 +443,5 @@ export const _insertNode = (node, id, newNode) => {
  */
 export const insertNode = (node, id, name) => {
     const mutateNode = setName(getNodeById(node, id), name);
-    console.log(_insertNode(node, id, mutateNode));
     return _insertNode(node, id, mutateNode);
 };

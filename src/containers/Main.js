@@ -20,12 +20,10 @@ export class Main extends React.Component {
             nodes: node.createNodeFromForm(newNodes)
         })
     };
-    setName = (index, id, name) => {
-        const searchNode = node.insertNode(this.state.nodes, id, name);
+    setName = (id, name) => {
         this.setState({
             nodes: node.insertNode(this.state.nodes, id, name)
         });
-        console.log(searchNode);
     };
     render() {
         const { nodes } = this.state;
