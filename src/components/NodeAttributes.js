@@ -12,7 +12,9 @@ export const NodeAttributes = ({attrs, id, setAttrs}) => {
         setOpen(true);
     };
     const changedAttrs = (values) => {
-        setAttrs(id, values);
+        if (values) {
+            setAttrs(id, values);
+        }
         setOpen(false);
     };
     return (

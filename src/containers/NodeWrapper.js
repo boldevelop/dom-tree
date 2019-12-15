@@ -12,7 +12,7 @@ import {Box} from "@material-ui/core";
 import {NodeName} from "../components/NodeName";
 import {NodeAttributes} from "../components/NodeAttributes";
 
-export const NodeWrapper = ({node, index, id, setName, setAttrs}) => {
+export const NodeWrapper = ({node, index, id, setName, setAttrs, setContent}) => {
     let isNodeString = false;
     let content = [];
     let name = '';
@@ -33,7 +33,12 @@ export const NodeWrapper = ({node, index, id, setName, setAttrs}) => {
     return (
         <>
             {isNodeString ? (
-                <Node content={node} index={index} id={recalculatedId}/>
+                <Node
+                    setContent={setContent}
+                    content={node}
+                    index={index}
+                    id={recalculatedId}
+                />
             ) : (
                 <Box width={1} mb={1}>
                     {content.length ? (
@@ -69,7 +74,14 @@ export const NodeWrapper = ({node, index, id, setName, setAttrs}) => {
                                     width={1}
                                 >
                                     {content.map(
-                                        (el, i) => <NodeWrapper node={el} key={i} index={i} id={recalculatedId} setName={setName}/>
+                                        (el, i) => <NodeWrapper
+                                            setContent={setContent}
+                                            node={el}
+                                            key={i}
+                                            index={i}
+                                            id={recalculatedId}
+                                            setName={setName}
+                                        />
                                     )}
                                 </Grid>
                             </ExpansionPanelDetails>

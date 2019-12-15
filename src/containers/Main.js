@@ -6,7 +6,7 @@ import {Box} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 
-export class Main extends React.Component {
+class Main extends React.Component {
     constructor(props) {
         super(props);
 
@@ -28,6 +28,11 @@ export class Main extends React.Component {
     setAttrs = (id, attrs) => {
         this.setState({
             nodes: node.insertChangedAttrsNode(this.state.nodes, id, attrs)
+        });
+    };
+    setContent = (id, content) => {
+        this.setState({
+            nodes: node.insertChangedContentNode(this.state.nodes, id, content)
         });
     };
     render() {
@@ -65,7 +70,12 @@ export class Main extends React.Component {
                 <Box width={1} height={1} mt={5}>
                     <Grid container justify='center' alignItems='center'>
                         <Box width="90%">
-                            <NodeWrapper node={nodes} setName={this.setName} setAttrs={this.setAttrs}/>
+                            <NodeWrapper
+                                node={nodes}
+                                setName={this.setName}
+                                setAttrs={this.setAttrs}
+                                setContent={this.setContent}
+                            />
                         </Box>
                     </Grid>
                 </Box>
@@ -75,3 +85,5 @@ export class Main extends React.Component {
         return content;
     }
 }
+
+export default Main;

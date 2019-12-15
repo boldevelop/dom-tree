@@ -447,7 +447,7 @@ export const insertChangedNameNode = (node, id, name) => {
 };
 
 /**
- * change Name and insert node
+ * change Attrs and insert node
  * @param {Map} node
  * @param {number} id
  * @param {array} attrs
@@ -457,4 +457,19 @@ export const insertChangedAttrsNode = (node, id, attrs) => {
     const targetNode = getNodeById(node, id);
     const newNode = _node(targetNode.get('type'), getName(targetNode), attrs, getContent(targetNode));
     return _insertNode(node, id, newNode);
+};
+
+/**
+ * change Content and insert node
+ * @param {Map} node
+ * @param {number} id
+ * @param {object} content
+ * @returns {Map}
+ */
+export const insertChangedContentNode = (node, id, content) => {
+    console.log(content);
+    return node;
+    // const targetNode = getNodeById(node, id);
+    // const newNode = _node(targetNode.get('type'), getName(targetNode), attrs, getContent(targetNode));
+    // return _insertNode(node, id, newNode);
 };
