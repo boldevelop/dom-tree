@@ -1,12 +1,11 @@
 import React from "react";
-import {Checkbox, TextField} from 'final-form-material-ui';
+import { TextField} from 'final-form-material-ui';
 import { Form, Field } from "react-final-form";
 import Button from "@material-ui/core/Button";
 import arrayMutators from "final-form-arrays";
 import { FieldArray } from "react-final-form-arrays";
 import AddNodeAttributes from "./AddNodeAttributes";
 import AddNodeContent from "./AddNodeContent";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 const validate = values => {
     const errors = {};

@@ -6,7 +6,6 @@ import {Box} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 
-
 export class Main extends React.Component {
     constructor(props) {
         super(props);

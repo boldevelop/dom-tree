@@ -1,5 +1,7 @@
 import * as list from './list.js';
 import md5 from 'md5';
+import './queue';
+import Queue from "./queue";
 
 /**
  * minimal hash function
@@ -336,6 +338,11 @@ const content = {
     ]
 };
 
+/**
+ * create node from beginning form
+ * @param {object} node
+ * @returns {Map}
+ */
 export const createNodeFromForm = node => {
     let type = 'htmlNode';
     if (!node.htmlNode) {
@@ -360,4 +367,32 @@ export const createNodeFromForm = node => {
         case 'htmlNode':
             return htmlNode(node.name, node.attributes, content);
     }
+};
+
+/**
+ * breadth-first search by ID
+ * @param {Map} node
+ * @param {number} id
+ * @returns {Map}
+ */
+export const getNodeById = (node, id) => {
+    const que = new Queue();
+    que.enqueue(node);
+    const iter = (q, searchNode) => {
+        if (!q.length) {
+            return searchNode;
+        }
+        const elem = q.dequeue();
+        if (typeof elem !== 'string') {
+            const content = getContent(elem);
+            const currentNodeId = getId(elem);
+            if (currentNodeId === id) {
+                return iter(q, elem);
+            } else {
+                q.enqueue(content);
+                return iter(q);
+            }
+        }
+    };
+    return iter(que, undefined);
 };
