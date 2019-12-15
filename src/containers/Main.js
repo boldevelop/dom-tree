@@ -2,6 +2,9 @@ import React from 'react';
 import * as node from '../core/node';
 import {NodeWrapper} from "./NodeWrapper";
 import AddNode from "../components/AddNode";
+import {Box} from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper";
 
 export class Main extends React.Component {
     constructor(props) {
@@ -31,10 +34,21 @@ export class Main extends React.Component {
         const aNode = node.htmlNode('a', aAtrs, ['this is a link']);
         const mainNode = node.htmlNode('div', attrs, ['some text', tNode, 'another text', aNode]);
 
-        return (mainNode &&
-            <main>
-                <NodeWrapper node={mainNode}/>
-            </main>
-        || <AddNode/>);
+        let content = (
+            <Box width={1} height={1} mt={5}>
+                <Grid container justify='center' alignItems='center'>
+                    <Box width="75%">
+                        <Paper style={{ padding: 16 }}>
+                            <AddNode/>
+                        </Paper>
+                    </Box>
+                </Grid>
+            </Box>
+        );
+        if (nodes) {
+            content = <NodeWrapper node={nodes}/>;
+        }
+
+        return content;
     }
 }
