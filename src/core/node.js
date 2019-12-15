@@ -97,7 +97,7 @@ const _node = (type, name, attr, content) => {
     const nodeMap = new Map();
     nodeMap.set('type', type);
     nodeMap.set('name', name ? name : null);
-    nodeMap.set('id', name ? md5(name) : md5(makeHash()));
+    nodeMap.set('id', md5(name + makeHash()));
     switch (type) {
         case 'singleNode':
             nodeMap.set('attr', list.l(...clearAttrs));
@@ -280,14 +280,12 @@ export const addContent = (node, insertElem, numberOfContent = 0, pos = 0) => {
  * @returns {Map}
  */
 export const setName = (node, name, isSingleNode = false) => {
-    _validate(node);
+    _validateNode(node);
     _validateTypeString(name);
     if (isSingleNode) {
         return _node('singleNode', name, list.convertToArray(getAttrs(node)), []);
     }
-    if (node.get('type') === 'textNode') {
-        return _node('htmlNode', name, list.l(), getContent(node));
-    }
+    return _node('htmlNode', name, list.convertToArray(getAttrs(node)), getContent(node));
 };
 
 // todo: протестирвоать
@@ -369,6 +367,7 @@ export const createNodeFromForm = node => {
     }
 };
 
+// todo: вынести в отдельный фаил работа с деревом
 /**
  * breadth-first search by ID
  * @param {Map} node
@@ -402,4 +401,48 @@ export const getNodeById = (node, id) => {
         return iter(q, searchNode);
     };
     return iter(que, undefined);
+};
+
+/**
+ * insert NewNode in Tree with Depth-first search
+ * @param {Map} node
+ * @param {number} id
+ * @param {Map} newNode
+ * @returns {Map}
+ */
+export const _insertNode = (node, id, newNode) => {
+    if (getId(node) === id) {
+        return newNode
+    }
+    const iter = (n) => {
+        if (typeof n === 'string') {
+            return n
+        }
+        if (getId(n) === id) {
+            return newNode
+        }
+        return getContent(n).map((e) => {
+            if (typeof e === 'string') {
+                return e
+            }
+            if (getId(e) === id) {
+                return newNode
+            }
+            return _node(n.get('type'), getName(n), list.convertToArray(getAttrs(n)), iter(e));
+        });
+    };
+    return _node(node.get('type'), getName(node), list.convertToArray(getAttrs(node)), iter(node))
+};
+
+/**
+ * change Name and insert node
+ * @param {Map} node
+ * @param {number} id
+ * @param {string} name
+ * @returns {Map}
+ */
+export const insertNode = (node, id, name) => {
+    const mutateNode = setName(getNodeById(node, id), name);
+    console.log(_insertNode(node, id, mutateNode));
+    return _insertNode(node, id, mutateNode);
 };

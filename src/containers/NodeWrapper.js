@@ -2,13 +2,13 @@ import React from "react";
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Grid from "@material-ui/core/Grid";
 
 import Node from '../components/Node';
 import * as n from "../core/node";
 import {Box} from "@material-ui/core";
+import {NodeName} from "../components/NodeName";
 
 export const NodeWrapper = ({node, index, id, setName}) => {
     let isNodeString = false;
@@ -22,6 +22,10 @@ export const NodeWrapper = ({node, index, id, setName}) => {
         content = n.getContent(node);
         recalculatedId = n.getId(node);
     }
+    const updateName = (name) => {
+        setName(index, recalculatedId, name);
+    };
+
     return (
         <>
             {isNodeString ? (
@@ -35,9 +39,7 @@ export const NodeWrapper = ({node, index, id, setName}) => {
                                 aria-label="Expand"
                                 aria-controls="additional-actions1-content"
                                 id="additional-actions1-header">
-                                <Typography variant="h4" gutterBottom onClick={() => setName(recalculatedId)}>
-                                    {name}
-                                </Typography>
+                                <NodeName name={name} updateName={updateName}/>
                             </ExpansionPanelSummary>
                             <ExpansionPanelDetails>
                                 <Grid
@@ -55,9 +57,7 @@ export const NodeWrapper = ({node, index, id, setName}) => {
                         </ExpansionPanel>
                     ) : (
                         <Box pl={3}>
-                            <Typography variant="h4" gutterBottom>
-                                {name}
-                            </Typography>
+                            <NodeName name={name} updateName={updateName}/>
                         </Box>
                     )}
                 </Box>
