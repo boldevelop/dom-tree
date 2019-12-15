@@ -22,7 +22,12 @@ export class Main extends React.Component {
     };
     setName = (id, name) => {
         this.setState({
-            nodes: node.insertNode(this.state.nodes, id, name)
+            nodes: node.insertChangedNameNode(this.state.nodes, id, name)
+        });
+    };
+    setAttrs = (id, attrs) => {
+        this.setState({
+            nodes: node.insertChangedAttrsNode(this.state.nodes, id, attrs)
         });
     };
     render() {
@@ -60,7 +65,7 @@ export class Main extends React.Component {
                 <Box width={1} height={1} mt={5}>
                     <Grid container justify='center' alignItems='center'>
                         <Box width="90%">
-                            <NodeWrapper node={nodes} setName={this.setName}/>
+                            <NodeWrapper node={nodes} setName={this.setName} setAttrs={this.setAttrs}/>
                         </Box>
                     </Grid>
                 </Box>

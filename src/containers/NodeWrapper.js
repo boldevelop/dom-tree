@@ -12,7 +12,7 @@ import {Box} from "@material-ui/core";
 import {NodeName} from "../components/NodeName";
 import {NodeAttributes} from "../components/NodeAttributes";
 
-export const NodeWrapper = ({node, index, id, setName}) => {
+export const NodeWrapper = ({node, index, id, setName, setAttrs}) => {
     let isNodeString = false;
     let content = [];
     let name = '';
@@ -52,7 +52,11 @@ export const NodeWrapper = ({node, index, id, setName}) => {
                                 >
                                     <NodeName name={name} updateName={updateName}/>
                                     {l.length(attrs)
-                                        ? (<NodeAttributes id={recalculatedId} attrs={l.convertToArray(attrs)} />)
+                                        ? (<NodeAttributes
+                                            setAttrs={setAttrs}
+                                            id={recalculatedId}
+                                            attrs={l.convertToArray(attrs)}
+                                        />)
                                         : null}
                                 </Grid>
                             </ExpansionPanelSummary>

@@ -441,7 +441,20 @@ export const _insertNode = (node, id, newNode) => {
  * @param {string} name
  * @returns {Map}
  */
-export const insertNode = (node, id, name) => {
-    const mutateNode = setName(getNodeById(node, id), name);
-    return _insertNode(node, id, mutateNode);
+export const insertChangedNameNode = (node, id, name) => {
+    const newNode = setName(getNodeById(node, id), name);
+    return _insertNode(node, id, newNode);
+};
+
+/**
+ * change Name and insert node
+ * @param {Map} node
+ * @param {number} id
+ * @param {array} attrs
+ * @returns {Map}
+ */
+export const insertChangedAttrsNode = (node, id, attrs) => {
+    const targetNode = getNodeById(node, id);
+    const newNode = _node(targetNode.get('type'), getName(targetNode), attrs, getContent(targetNode));
+    return _insertNode(node, id, newNode);
 };
