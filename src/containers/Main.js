@@ -30,59 +30,33 @@ class Main extends React.Component {
             nodes: node.insertChangedAttrsNode(this.state.nodes, id, attrs)
         });
     };
-    setContent = (id, content) => {
+    setContent = (id, content, index) => {
         this.setState({
-            nodes: node.insertChangedContentNode(this.state.nodes, id, content)
+            nodes: node.insertChangedContentNode(this.state.nodes, id, content, index)
         });
     };
     render() {
         const { nodes } = this.state;
-        const attrs = [
-            {
-                name: 'class',
-                value: 'container'
-            }, {
-                name: 'data-type',
-                value: 'htmlNode'
-            }];
-        const aAtrs = [
-            {
-                name: 'href',
-                value: '#'
-            }];
-        const tNode = node.singleNode('br', []);
-        const aNode = node.htmlNode('a', aAtrs, ['this is a link']);
-        const mainNode = node.htmlNode('div', attrs, ['some text', tNode, 'another text', aNode]);
-
-        let content = (
+        return (
             <Box width={1} height={1} mt={5}>
                 <Grid container justify='center' alignItems='center'>
-                    <Box width="75%">
-                        <Paper style={{ padding: 16 }}>
-                            <AddNode updateNodes={this.updateNodes}/>
-                        </Paper>
-                    </Box>
-                </Grid>
-            </Box>
-        );
-        if (nodes) {
-            content = (
-                <Box width={1} height={1} mt={5}>
-                    <Grid container justify='center' alignItems='center'>
-                        <Box width="90%">
+                    <Box width="90%">
+                        {nodes ? (
                             <NodeWrapper
                                 node={nodes}
                                 setName={this.setName}
                                 setAttrs={this.setAttrs}
                                 setContent={this.setContent}
                             />
-                        </Box>
-                    </Grid>
-                </Box>
-            );
-        }
-
-        return content;
+                        ) : (
+                            <Paper style={{ padding: 16 }}>
+                                <AddNode updateNodes={this.updateNodes}/>
+                            </Paper>
+                        )}
+                    </Box>
+                </Grid>
+            </Box>
+        );
     }
 }
 

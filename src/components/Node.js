@@ -12,7 +12,7 @@ const Node = ({content, index, id, setContent}) => {
     };
     const changeContent = (values) => {
         if (values) {
-            setContent(id, values);
+            setContent(id, values, index);
         }
         setOpen(false);
     };

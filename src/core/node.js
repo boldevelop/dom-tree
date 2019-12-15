@@ -461,15 +461,23 @@ export const insertChangedAttrsNode = (node, id, attrs) => {
 
 /**
  * change Content and insert node
- * @param {Map} node
+ * @param {Map} rootNode
  * @param {number} id
  * @param {object} content
+ * @param {number} index
  * @returns {Map}
  */
-export const insertChangedContentNode = (node, id, content) => {
-    console.log(content);
-    return node;
-    // const targetNode = getNodeById(node, id);
-    // const newNode = _node(targetNode.get('type'), getName(targetNode), attrs, getContent(targetNode));
-    // return _insertNode(node, id, newNode);
+export const insertChangedContentNode = (rootNode, id, content, index) => {
+    const targetNode = getNodeById(rootNode, id);
+    const insertNode = createNodeFromForm({
+        htmlNode: content.htmlNode,
+        singleNode: content.singleNode,
+        name: content.name,
+        attributes: content.attributes,
+        content: content.content
+    });
+    const inContent = content.inContent.split('<>');
+    const pos = inContent[0].length;
+    const newNode = addContent(targetNode, insertNode, index, pos);
+    return _insertNode(rootNode, id, newNode);
 };

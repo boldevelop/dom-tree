@@ -37,7 +37,7 @@ export const ModalFormAttributes = ({attrs, openModal, handleClose}) => {
         <Modal
             className={classes.modal}
             open={openModal}
-            onClose={handleClose}
+            onClose={() => handleClose()}
             closeAfterTransition
             BackdropComponent={Backdrop}
             disableBackdropClick={false}
