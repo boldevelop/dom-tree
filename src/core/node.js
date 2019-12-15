@@ -251,7 +251,7 @@ export const addContent = (node, insertElem, numberOfContent = 0, pos = 0) => {
         isStringInsertElem = false;
     }
     const oldContent = getContent(node);
-    const newContent = oldContent.map((e, i) => {
+    const newContent = oldContent.length ? oldContent.map((e, i) => {
         if (i === numberOfContent) {
             if (isStringInsertElem) {
                 return insertElem;
@@ -268,7 +268,7 @@ export const addContent = (node, insertElem, numberOfContent = 0, pos = 0) => {
             }
         }
         return e;
-    });
+    }) : [insertElem];
     return _node(node.get('type'), getName(node), list.convertToArray(getAttrs(node)), flattenDeep(newContent));
 };
 

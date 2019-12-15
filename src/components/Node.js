@@ -3,6 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import Card from "@material-ui/core/Card";
 import {Box} from "@material-ui/core";
 import {ModalFormContent} from "./ModalFormContent";
+import Button from "@material-ui/core/Button";
 
 const Node = ({content, index, id, setContent}) => {
     const [open, setOpen] = React.useState(false);
@@ -21,6 +22,17 @@ const Node = ({content, index, id, setContent}) => {
             <Box p={3}>
                 <Typography color="textSecondary">{content}</Typography>
             </Box>
+            {(!content.length &&
+                <Box p={3}>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => (e) => handleOpen(e)}
+                    >
+                        Добавить контент
+                    </Button>
+                </Box>
+            )}
             <ModalFormContent openModal={open} handleClose={changeContent} content={content}/>
         </Card>
     </Box>

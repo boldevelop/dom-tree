@@ -41,56 +41,57 @@ export const NodeWrapper = ({node, index, id, setName, setAttrs, setContent}) =>
                 />
             ) : (
                 <Box width={1} mb={1}>
-                    {content.length ? (
-                        <ExpansionPanel>
-                            <ExpansionPanelSummary
-                                expandIcon={<ExpandMoreIcon />}
-                                aria-label="Expand"
-                                aria-controls="additional-actions1-content"
-                                id="additional-actions1-header">
-                                <Grid
-                                    container
-                                    direction="column"
-                                    justify="flex-start"
-                                    alignItems="flex-start"
-                                    width={1}
-                                >
-                                    <NodeName name={name} updateName={updateName}/>
-                                    {l.length(attrs)
-                                        ? (<NodeAttributes
-                                            setAttrs={setAttrs}
-                                            id={recalculatedId}
-                                            attrs={l.convertToArray(attrs)}
-                                        />)
-                                        : null}
-                                </Grid>
-                            </ExpansionPanelSummary>
-                            <ExpansionPanelDetails>
-                                <Grid
-                                    container
-                                    direction="column"
-                                    justify="flex-start"
-                                    alignItems="flex-start"
-                                    width={1}
-                                >
-                                    {content.map(
-                                        (el, i) => <NodeWrapper
-                                            setContent={setContent}
-                                            node={el}
-                                            key={i}
-                                            index={i}
-                                            id={recalculatedId}
-                                            setName={setName}
-                                        />
-                                    )}
-                                </Grid>
-                            </ExpansionPanelDetails>
-                        </ExpansionPanel>
-                    ) : (
-                        <Box pl={3}>
-                            <NodeName name={name} updateName={updateName}/>
-                        </Box>
-                    )}
+                    <ExpansionPanel>
+                        <ExpansionPanelSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-label="Expand"
+                            aria-controls="additional-actions1-content"
+                            id="additional-actions1-header">
+                            <Grid
+                                container
+                                direction="column"
+                                justify="flex-start"
+                                alignItems="flex-start"
+                                width={1}
+                            >
+                                <NodeName name={name} updateName={updateName}/>
+                                {l.length(attrs)
+                                    ? (<NodeAttributes
+                                        setAttrs={setAttrs}
+                                        id={recalculatedId}
+                                        attrs={l.convertToArray(attrs)}
+                                    />)
+                                    : null}
+                            </Grid>
+                        </ExpansionPanelSummary>
+                        <ExpansionPanelDetails>
+                            <Grid
+                                container
+                                direction="column"
+                                justify="flex-start"
+                                alignItems="flex-start"
+                                width={1}
+                            >
+                                {content.length ? content.map(
+                                    (el, i) => <NodeWrapper
+                                        setContent={setContent}
+                                        node={el}
+                                        key={i}
+                                        index={i}
+                                        id={recalculatedId}
+                                        setName={setName}
+                                    />
+                                ) : (
+                                    <Node
+                                        setContent={setContent}
+                                        content={''}
+                                        index={index}
+                                        id={recalculatedId}
+                                    />
+                                )}
+                            </Grid>
+                        </ExpansionPanelDetails>
+                    </ExpansionPanel>
                 </Box>
             )}
         </>
