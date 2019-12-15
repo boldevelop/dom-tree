@@ -40,8 +40,6 @@ export const ModalFormAttributes = ({attrs, openModal, handleClose}) => {
             onClose={() => handleClose()}
             closeAfterTransition
             BackdropComponent={Backdrop}
-            disableBackdropClick={false}
-            disableEscapeKeyDown={false}
             BackdropProps={{
                 timeout: 500,
             }}

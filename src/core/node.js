@@ -469,15 +469,14 @@ export const insertChangedAttrsNode = (node, id, attrs) => {
  */
 export const insertChangedContentNode = (rootNode, id, content, index) => {
     const targetNode = getNodeById(rootNode, id);
-    const insertNode = createNodeFromForm({
-        htmlNode: content.htmlNode,
-        singleNode: content.singleNode,
-        name: content.name,
-        attributes: content.attributes,
-        content: content.content
-    });
-    const inContent = content.inContent.split('<>');
-    const pos = inContent[0].length;
-    const newNode = addContent(targetNode, insertNode, index, pos);
+    let newNode;
+    if (content.insertNode) {
+        const insertNode = createNodeFromForm({...content});
+        const inContent = content.inContent.split('<>');
+        const pos = inContent[0].length;
+        newNode = addContent(targetNode, insertNode, index, pos);
+    } else {
+        newNode = addContent(targetNode, content.inContent, index);
+    }
     return _insertNode(rootNode, id, newNode);
 };

@@ -9,7 +9,7 @@ import WhenFieldChanges from "./WhenFieldChanges";
 
 const required = value => (value ? undefined : "Required");
 
-const AddNodeContent = ({name, index, removeAttr, push, isHtmlNode, isSingleNode}) => {
+const AddNodeContent = ({name, index, removeAttr, push, isHtmlNode, isSingleNode, isNotInsertNode = false}) => {
         const htmlNode = name ? `${name}.htmlNode` : 'htmlNode';
         const singleNode = name ? `${name}.singleNode` : 'singleNode';
         const nameField = name ? `${name}.name` : 'name';
@@ -32,11 +32,11 @@ const AddNodeContent = ({name, index, removeAttr, push, isHtmlNode, isSingleNode
 
                     <Field
                         fullWidth
-                        required
+                        required={isHtmlNode}
                         name={nameField}
                         component={TextField}
                         validate={isHtmlNode ? required : undefined}
-                        disabled={!isHtmlNode}
+                        disabled={isNotInsertNode || !isHtmlNode}
                         type="text"
                         label="название ноды"
                     />
@@ -48,6 +48,7 @@ const AddNodeContent = ({name, index, removeAttr, push, isHtmlNode, isSingleNode
                                     name={htmlNode}
                                     component={Checkbox}
                                     type="checkbox"
+                                    disabled={isNotInsertNode}
                                 />
                         }
                     />
@@ -57,7 +58,7 @@ const AddNodeContent = ({name, index, removeAttr, push, isHtmlNode, isSingleNode
                                 <Field
                                     name={singleNode}
                                     component={Checkbox}
-                                    disabled={!isHtmlNode}
+                                    disabled={isNotInsertNode || !isHtmlNode}
                                     type="checkbox"
                                 />
                         }
@@ -70,12 +71,12 @@ const AddNodeContent = ({name, index, removeAttr, push, isHtmlNode, isSingleNode
                                     name={nameAttr}
                                     index={indexAttr}
                                     fields={fields}
-                                    disabled={!isHtmlNode}
+                                    disabled={isNotInsertNode || !isHtmlNode}
                                     removeAttr={removeAttr}
                                 />)
                             }
                     </FieldArray>
-                    {(isHtmlNode && <Button
+                    {(isHtmlNode && isNotInsertNode && <Button
                         variant="contained"
                         onClick={() => push(attributes, {
                                 name: '',
@@ -90,7 +91,7 @@ const AddNodeContent = ({name, index, removeAttr, push, isHtmlNode, isSingleNode
                         name={content}
                         component={TextField}
                         type="text"
-                        disabled={isSingleNode}
+                        disabled={isNotInsertNode || isSingleNode}
                         label="Содержимое ноды"
                     />
             </div>

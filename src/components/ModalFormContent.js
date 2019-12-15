@@ -10,7 +10,9 @@ import arrayMutators from "final-form-arrays";
 import Button from "@material-ui/core/Button";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import AddNodeContent from "./AddNodeContent";
-import {TextField} from "final-form-material-ui";
+import {Checkbox, TextField} from "final-form-material-ui";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import WhenFieldChanges from "./WhenFieldChanges";
 
 const validate = values => {
     const errors = {};
@@ -46,6 +48,7 @@ export const ModalFormContent = ({openModal, handleClose, id, content}) => {
                 value: ''
             }
         ],
+        insertNode: false,
         htmlNode: true,
         singleNode: false
     };
@@ -56,8 +59,6 @@ export const ModalFormContent = ({openModal, handleClose, id, content}) => {
             onClose={() => handleClose()}
             closeAfterTransition
             BackdropComponent={Backdrop}
-            disableBackdropClick={false}
-            disableEscapeKeyDown={false}
             BackdropProps={{
                 timeout: 500,
             }}
@@ -82,22 +83,56 @@ export const ModalFormContent = ({openModal, handleClose, id, content}) => {
                                            form: {
                                                mutators: { push }
                                            },
-                                           submitting
-                                       }) => <form onSubmit={(e) => handleSubmit(e)} noValidate autoComplete='off'>
+                                           submitting,
+                                           values
+                                       }) => <form
+                                onSubmit={(e) => handleSubmit(e)}
+                                noValidate
+                                autoComplete='off'
+                            >
+                                <WhenFieldChanges
+                                    field={'insertNode'}
+                                    becomes={false}
+                                    set={'name'}
+                                    to={''}
+                                />
+                                <WhenFieldChanges
+                                    field={'insertNode'}
+                                    becomes={false}
+                                    set={'content'}
+                                    to={''}
+                                />
+                                <WhenFieldChanges
+                                    field={'insertNode'}
+                                    becomes={false}
+                                    set={'attributes'}
+                                    to={[]}
+                                />
                                 <Field
                                     fullWidth
                                     required
                                     name="inContent"
                                     component={TextField}
                                     type="text"
-                                    label="Строка внедрения"
+                                    label="Редактируемая строка"
+                                />
+                                <FormControlLabel
+                                    label="Вставить ноду в текст?"
+                                    control={
+                                        <Field
+                                            name='insertNode'
+                                            component={Checkbox}
+                                            type="checkbox"
+                                        />
+                                    }
                                 />
                                 <AddNodeContent
                                     index={id}
                                     push={push}
-                                    isHtmlNode={true}
-                                    isSingleNode={false}
+                                    isHtmlNode={values.htmlNode}
+                                    isSingleNode={values.singleNode}
                                     removeAttr={removeAttribute}
+                                    isNotInsertNode={!values.insertNode}
                                 />
                                 <Button
                                     variant="contained"
