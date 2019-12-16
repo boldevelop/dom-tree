@@ -19,7 +19,7 @@ export const NodeAttributes = ({attrs, id, setAttrs}) => {
     };
     return (
         <Box width={1} onClick={(e) => handleOpen(e)}>
-            <Typography variant="caption" gutterBottom>
+            <Typography variant="caption" gutterBottom color="secondary">
                 Аттрибуты
             </Typography>
             <Divider />

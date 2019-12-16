@@ -19,14 +19,16 @@ const Node = ({content, index, id, setContent}) => {
     };
     return <Box width={1} mb={1}>
         <Card onClick={(e) => handleOpen(e)}>
-            <Box p={3}>
-                <Typography color="textSecondary">{content}</Typography>
-            </Box>
-            {(!content.length &&
+            {content.length ? (
+                <Box p={3}>
+                    <Typography color="textSecondary">{content}</Typography>
+                </Box>
+            ) : (
                 <Box p={3}>
                     <Button
-                        variant="contained"
-                        color="primary"
+                        variant="outlined"
+                        size="small"
+                        color="secondary"
                         onClick={() => (e) => handleOpen(e)}
                     >
                         Добавить контент

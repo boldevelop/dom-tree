@@ -80,6 +80,7 @@ export const NodeWrapper = ({node, index, id, setName, setAttrs, setContent}) =>
                                         index={i}
                                         id={recalculatedId}
                                         setName={setName}
+                                        setAttrs={setAttrs}
                                     />
                                 ) : (
                                     <Node

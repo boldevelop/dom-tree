@@ -46,8 +46,8 @@ export const ModalFormAttributes = ({attrs, openModal, handleClose}) => {
         >
             <Fade in={openModal}>
                 <Paper className={classes.paper}>
-                    <Box mb={2}>
-                        <Typography variant="h5" component="h3">
+                    <Box mb={3}>
+                        <Typography variant="h5" component="h3" color="secondary">
                             Редактирование аттрибутов
                         </Typography>
                     </Box>
@@ -78,9 +78,21 @@ export const ModalFormAttributes = ({attrs, openModal, handleClose}) => {
                                             />)
                                     }
                                 </FieldArray>
+                                <Box mt={1} mb={3}>
+                                    <Button
+                                        size="small"
+                                        color="secondary"
+                                        onClick={() => push("attributes", {
+                                            name: '',
+                                            value: ''
+                                        })}
+                                    >
+                                        Добавить аттрибут
+                                    </Button>
+                                </Box>
                                 <Button
-                                    variant="contained"
-                                    color="primary"
+                                    variant="outlined"
+                                    color="secondary"
                                     type="submit"
                                     disabled={submitting}
                                 >

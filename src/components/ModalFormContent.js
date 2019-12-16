@@ -65,9 +65,15 @@ export const ModalFormContent = ({openModal, handleClose, id, content}) => {
         >
             <Fade in={openModal}>
                 <Paper className={classes.paper}>
-                    <Box mb={2}>
-                        <Typography variant="h5" component="h3">
-                            Редактирование аттрибутов
+                    <Box mb={1}>
+                        <Typography variant="h5" component="h3" color="secondary">
+                            Редактирование контента
+                        </Typography>
+                    </Box>
+                    <Box width={1} mb={2}>
+                        <Typography>
+                            Для того чтобы внедрить
+                            ноду в текст, в нужное место строки необходимо вставить '&lt;&gt;'
                         </Typography>
                     </Box>
                     <Box width={1} mb={2}>
@@ -108,24 +114,27 @@ export const ModalFormContent = ({openModal, handleClose, id, content}) => {
                                     set={'attributes'}
                                     to={[]}
                                 />
-                                <Field
-                                    fullWidth
-                                    required
-                                    name="inContent"
-                                    component={TextField}
-                                    type="text"
-                                    label="Редактируемая строка"
-                                />
-                                <FormControlLabel
-                                    label="Вставить ноду в текст?"
-                                    control={
-                                        <Field
-                                            name='insertNode'
-                                            component={Checkbox}
-                                            type="checkbox"
-                                        />
-                                    }
-                                />
+                                <Box mb={4}>
+                                    <Field
+                                        fullWidth
+                                        required
+                                        name="inContent"
+                                        component={TextField}
+                                        type="text"
+                                        label="Редактируемая строка"
+                                    />
+                                    <FormControlLabel
+                                        label="Вставить ноду в текст?"
+                                        control={
+                                            <Field
+                                                name='insertNode'
+                                                component={Checkbox}
+                                                type="checkbox"
+                                            />
+                                        }
+                                    />
+                                </Box>
+
                                 <AddNodeContent
                                     index={id}
                                     push={push}
@@ -134,14 +143,16 @@ export const ModalFormContent = ({openModal, handleClose, id, content}) => {
                                     removeAttr={removeAttribute}
                                     isNotInsertNode={!values.insertNode}
                                 />
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    type="submit"
-                                    disabled={submitting}
-                                >
-                                    Применить
-                                </Button>
+                                <Box mt={4}>
+                                    <Button
+                                        variant="outlined"
+                                        color="secondary"
+                                        type="submit"
+                                        disabled={submitting}
+                                    >
+                                        Применить
+                                    </Button>
+                                </Box>
                             </form>}
                         />
                     </Box>

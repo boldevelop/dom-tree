@@ -6,6 +6,8 @@ import arrayMutators from "final-form-arrays";
 import { FieldArray } from "react-final-form-arrays";
 import AddNodeAttributes from "./AddNodeAttributes";
 import AddNodeContent from "./AddNodeContent";
+import Typography from "@material-ui/core/Typography";
+import {Box} from "@material-ui/core";
 
 const validate = values => {
     const errors = {};
@@ -71,64 +73,87 @@ const AddNode = ({updateNodes}) => {
                            submitting,
                            values
             }) => <form onSubmit={(e) => handleSubmit(e)} noValidate autoComplete='off'>
-                <Field
-                    fullWidth
-                    required
-                    name="name"
-                    component={TextField}
-                    type="text"
-                    label="Имя ноды"
-                />
+                <Box mb={4}>
+                    <Typography variant="h5" color="secondary">
+                        Форма создания корневого узла
+                    </Typography>
+                </Box>
+                <Box mb={4}>
+                    <Field
+                        fullWidth
+                        required
+                        name="name"
+                        component={TextField}
+                        type="text"
+                        label="Имя ноды"
+                    />
+                </Box>
 
-                <FieldArray name="attributes">
-                    {({ fields }) =>
-                        fields.map((name, index) =>
-                            <AddNodeAttributes
-                                key={`${name}-${index}`}
-                                name={name}
-                                index={index}
-                                fields={fields}
-                                disabled={false}
-                                removeAttr={removeAttribute}
-                            />)
-                    }
-                </FieldArray>
-                <Button
-                    variant="contained"
-                    onClick={() => push("attributes", {
-                        name: '',
-                        value: ''
-                    })}
-                >
-                    Добавить аттрибут
-                </Button>
+                <Box mb={4} border={1} borderRadius={4} borderColor='text.secondary' p=".7rem">
+                    <Typography variant="h6" color="secondary">
+                        Аттрибуты
+                    </Typography>
+                    <FieldArray name="attributes">
+                        {({ fields }) =>
+                            fields.map((name, index) =>
+                                <AddNodeAttributes
+                                    key={`${name}-${index}`}
+                                    name={name}
+                                    index={index}
+                                    fields={fields}
+                                    disabled={false}
+                                    removeAttr={removeAttribute}
+                                />)
+                        }
+                    </FieldArray>
+                    <Box mt={3}>
+                        <Button
+                            size="small"
+                            color="secondary"
+                            onClick={() => push("attributes", {
+                                name: '',
+                                value: ''
+                            })}
+                        >
+                            Добавить аттрибут
+                        </Button>
+                    </Box>
+                </Box>
 
-                <FieldArray name="content">
-                    {({ fields }) =>
-                        fields.map((name, index) =>
-                            <AddNodeContent
-                                key={`${name}-${index}`}
-                                name={name}
-                                index={index}
-                                push={push}
-                                isHtmlNode={values.content[index].htmlNode}
-                                isSingleNode={values.content[index].singleNode}
-                                removeAttr={removeAttribute}
-                            />)
-                    }
-                </FieldArray>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => push("content", addNodeValue)}
-                >
-                    Добавить ноду
-                </Button>
+                <Box mb={4} border={1} borderRadius={4} borderColor='text.secondary' p=".7rem">
+                    <Typography variant="h6" color="secondary">
+                        Контент внутри корневого узла
+                    </Typography>
+                    <FieldArray name="content">
+                        {({ fields }) =>
+                            fields.map((name, index) =>
+                                <AddNodeContent
+                                    key={`${name}-${index}`}
+                                    name={name}
+                                    index={index}
+                                    push={push}
+                                    isHtmlNode={values.content[index].htmlNode}
+                                    isSingleNode={values.content[index].singleNode}
+                                    removeAttr={removeAttribute}
+                                />)
+                        }
+                    </FieldArray>
+                    <Box mt={3}>
+                        <Button
+                            size="small"
+                            color="secondary"
+                            onClick={() => push("content", addNodeValue)}
+                        >
+                            Добавить ноду
+                        </Button>
+                    </Box>
+                </Box>
 
                 <Button
-                    variant="contained"
-                    color="primary"
+                    variant="outlined"
+                    color="secondary"
                     type="submit"
+                    size="large"
                     disabled={submitting}
                 >
                     Создать

@@ -6,6 +6,8 @@ import {FieldArray} from "react-final-form-arrays";
 import AddNodeAttributes from "./AddNodeAttributes";
 import Button from "@material-ui/core/Button";
 import WhenFieldChanges from "./WhenFieldChanges";
+import {Box} from "@material-ui/core";
+import Typography from "@material-ui/core/Typography";
 
 const required = value => (value ? undefined : "Required");
 
@@ -42,58 +44,64 @@ const AddNodeContent = ({name, index, removeAttr, push, isHtmlNode, isSingleNode
                     />
 
                     <FormControlLabel
-                        label="htmlNode"
+                        label="тэг"
                         control={
-                                <Field
-                                    name={htmlNode}
-                                    component={Checkbox}
-                                    type="checkbox"
-                                    disabled={isNotInsertNode}
-                                />
+                            <Field
+                                name={htmlNode}
+                                component={Checkbox}
+                                type="checkbox"
+                                disabled={isNotInsertNode}
+                            />
                         }
                     />
                     <FormControlLabel
-                        label="singleNode"
+                        label="не парный тэг"
                         control={
-                                <Field
-                                    name={singleNode}
-                                    component={Checkbox}
-                                    disabled={isNotInsertNode || !isHtmlNode}
-                                    type="checkbox"
-                                />
+                            <Field
+                                name={singleNode}
+                                component={Checkbox}
+                                disabled={isNotInsertNode || !isHtmlNode}
+                                type="checkbox"
+                            />
                         }
                     />
-
+                <Box key={index} mb={4} border={1} borderRadius={4} borderColor='text.secondary' p=".7rem">
+                    <Typography color="secondary">
+                        Аттрибуты
+                    </Typography>
                     <FieldArray name={attributes}>
-                            {({ fields }) => fields.map((nameAttr, indexAttr) =>
-                                <AddNodeAttributes
-                                    key={`${nameAttr}-${indexAttr}`}
-                                    name={nameAttr}
-                                    index={indexAttr}
-                                    fields={fields}
-                                    disabled={isNotInsertNode || !isHtmlNode}
-                                    removeAttr={removeAttr}
-                                />)
-                            }
+                        {({ fields }) => fields.map((nameAttr, indexAttr) =>
+                            <AddNodeAttributes
+                                key={`${nameAttr}-${indexAttr}`}
+                                name={nameAttr}
+                                index={indexAttr}
+                                fields={fields}
+                                disabled={isNotInsertNode || !isHtmlNode}
+                                removeAttr={removeAttr}
+                            />)
+                        }
                     </FieldArray>
-                    {(isHtmlNode && isNotInsertNode && <Button
-                        variant="contained"
-                        onClick={() => push(attributes, {
+                    {(isHtmlNode && !isNotInsertNode && <Box mt={3}>
+                        <Button
+                            size="small"
+                            color="secondary"
+                            onClick={() => push(attributes, {
                                 name: '',
                                 value: ''
-                        })}
-                    >
+                            })}
+                        >
                             Добавить аттрибут
-                    </Button>)}
-
-                    <Field
-                        fullWidth
-                        name={content}
-                        component={TextField}
-                        type="text"
-                        disabled={isNotInsertNode || isSingleNode}
-                        label="Содержимое ноды"
-                    />
+                        </Button>
+                    </Box>)}
+                </Box>
+                <Field
+                    fullWidth
+                    name={content}
+                    component={TextField}
+                    type="text"
+                    disabled={isNotInsertNode || isSingleNode}
+                    label="Содержимое ноды"
+                />
             </div>
         )
 };

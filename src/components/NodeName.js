@@ -61,7 +61,7 @@ export const NodeName = ({name, updateName}) => {
                 <Fade in={open}>
                     <Paper className={classes.paper}>
                         <Box mb={2}>
-                            <Typography variant="h5" component="h3">
+                            <Typography variant="h5" component="h3" color="secondary">
                                 Редактирование имени ноды
                             </Typography>
                         </Box>
@@ -78,8 +78,8 @@ export const NodeName = ({name, updateName}) => {
                             />
                         </Box>
                         <Button
-                            color="primary"
-                            variant="contained"
+                            color="secondary"
+                            variant="outlined"
                             onClick={handleClose}
                         >
                             Применить

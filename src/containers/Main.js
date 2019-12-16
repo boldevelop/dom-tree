@@ -5,6 +5,7 @@ import AddNode from "../components/AddNode";
 import {Box} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
+import Typography from "@material-ui/core/Typography";
 
 class Main extends React.Component {
     constructor(props) {
@@ -15,7 +16,6 @@ class Main extends React.Component {
         };
     }
     updateNodes = newNodes => {
-        console.log(node.createNodeFromForm(newNodes));
         this.setState({
             nodes: node.createNodeFromForm(newNodes)
         })
@@ -42,16 +42,37 @@ class Main extends React.Component {
                 <Grid container justify='center' alignItems='center'>
                     <Box width="90%">
                         {nodes ? (
-                            <NodeWrapper
-                                node={nodes}
-                                setName={this.setName}
-                                setAttrs={this.setAttrs}
-                                setContent={this.setContent}
-                            />
+                            <>
+                                <Box mb={2}>
+                                    <Paper style={{ padding: 16 }}>
+                                        <Typography color="textSecondary">
+                                            Чтобы редактировать ноды необходимо кликнуть по имени, аттрибутам и
+                                            текстовому контенту. Кнопку добавления аттрибутов,
+                                            когда они пустые и удалени нод, не успел
+                                        </Typography>
+                                    </Paper>
+                                </Box>
+                                <NodeWrapper
+                                    node={nodes}
+                                    setName={this.setName}
+                                    setAttrs={this.setAttrs}
+                                    setContent={this.setContent}
+                                />
+                            </>
                         ) : (
-                            <Paper style={{ padding: 16 }}>
-                                <AddNode updateNodes={this.updateNodes}/>
-                            </Paper>
+                            <>
+                                <Box mb={2}>
+                                    <Paper style={{ padding: 16 }}>
+                                        <Typography color="textSecondary">
+                                            Нода это подобие html тэгов. Имеются три вида парные, не парные и текстовые
+                                            Форма тормозит из-за вложенных динамичных полей
+                                        </Typography>
+                                    </Paper>
+                                </Box>
+                                <Paper style={{ padding: 16 }}>
+                                    <AddNode updateNodes={this.updateNodes}/>
+                                </Paper>
+                            </>
                         )}
                     </Box>
                 </Grid>
